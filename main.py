@@ -44,6 +44,9 @@ class ThreadMessage(BaseModel):
 class Thread(BaseModel):
     messages: List[ThreadMessage]
 
+class CreateMessage(BaseModel):
+    content: str
+
 @app.post("/api/create_thread")
 async def create_thread():
     thread = await client.beta.threads.create()
@@ -104,4 +107,25 @@ async def get_thread(thread_id: str):
 
     return Thread(
         messages=result,
+    )
+
+@app.post("/api/threads/{thread_id}")
+async def add_message(thread_id: str, message: CreateMessage):
+    await client.beta.threads.messages.create(
+        thread_id=thread_id,
+        content=message.content,
+        role="user"
+    )
+
+    run = await client.beta.threads.runs.create(
+        thread_id=thread_id,
+        assistant_id=assistant_id
+    )
+
+    return RunStatus(
+        run_id=run.id,
+        thread_id=thread_id,
+        status=run.status,
+        required_action=run.required_action,
+        last_error=run.last_error
     )
