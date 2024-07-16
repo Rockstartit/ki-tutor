@@ -34,7 +34,7 @@ class RunStatus(BaseModel):
     required_action: Optional[RequiredAction]
     last_error: Optional[LastError]
 
-@app.post("/create_thread")
+@app.post("/api/create_thread")
 async def create_thread():
     thread = await client.beta.threads.create()
 
@@ -55,6 +55,21 @@ async def create_thread():
     return RunStatus(
         run_id=run.id,
         thread_id=thread.id,
+        status=run.status,
+        required_action=run.required_action,
+        last_error=run.last_error
+    )
+
+@app.get("/api/threads/{thread_id}/runs/{run_id}")
+async def get_run(thread_id: str, run_id: str):
+    run = await client.beta.threads.runs.retrieve(
+        thread_id=thread_id,
+        run_id=run_id
+    )
+
+    return RunStatus(
+        run_id=run.id,
+        thread_id=thread_id,
         status=run.status,
         required_action=run.required_action,
         last_error=run.last_error
