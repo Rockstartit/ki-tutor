@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from dotenv import load_dotenv
 
@@ -33,6 +33,16 @@ class RunStatus(BaseModel):
     status: str
     required_action: Optional[RequiredAction]
     last_error: Optional[LastError]
+
+class ThreadMessage(BaseModel):
+    content: str
+    role: str
+    hidden: bool
+    id: str
+    created_at: int
+
+class Thread(BaseModel):
+    messages: List[ThreadMessage]
 
 @app.post("/api/create_thread")
 async def create_thread():
@@ -73,4 +83,25 @@ async def get_run(thread_id: str, run_id: str):
         status=run.status,
         required_action=run.required_action,
         last_error=run.last_error
+    )
+
+@app.get("/api/threads/{thread_id}")
+async def get_thread(thread_id: str):
+    messages = await client.beta.threads.messages.list(
+        thread_id=thread_id
+    )
+
+    result = [
+        ThreadMessage(
+            content=message.content[0].text.value,
+            role=message.role,
+            hidden="type" in message.metadata and message.metadata["type"] == "hidden",
+            id=message.id,
+            created_at=message.created_at
+        )
+        for message in messages.data
+    ]
+
+    return Thread(
+        messages=result,
     )
