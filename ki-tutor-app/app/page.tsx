@@ -1,13 +1,14 @@
 'use client'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, ConversationHeader } from '@chatscope/chat-ui-kit-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 
 export default function Home() {
   const [threadId, setThreadId] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(false);
+  const hiddenMessageSent = useRef(false);
 
   // On page load create a new thread
   useEffect(() => {
@@ -17,11 +18,32 @@ export default function Home() {
       });
       const data = await res.json();
       setThreadId(data.threadId);
+      if (!hiddenMessageSent.current) {
+        sendHiddenMessage(data.threadId, "Stelle dich kurz vor und ermutige das Stellen von Fragen.");
+        hiddenMessageSent.current = true;
+      }
     }
     if (!threadId) {
       createThread();
     }
   }, [threadId]);
+
+  const sendHiddenMessage = async (threadId, text) => {
+    const response = await fetch(
+      `/api/threads/${threadId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content: text,
+        }),
+      }
+    );
+    const stream = AssistantStream.fromReadableStream(response.body);
+    handleReadableStream(stream);
+  };
 
   const sendMessage = async (text) => {
     const response = await fetch(
