@@ -100,7 +100,7 @@ export default function Home() {
 
 
   return (
-    <div style={{ position:"relative", height: "100vh" }}>
+    <div style={{ position:"relative", height: "100dvh" }}>
       <MainContainer>
         <ChatContainer>
           <ConversationHeader>
