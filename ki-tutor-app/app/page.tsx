@@ -1,11 +1,10 @@
 'use client'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput } from '@chatscope/chat-ui-kit-react';
-import { useEffect, useRef, useState } from 'react';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput, ConversationHeader } from '@chatscope/chat-ui-kit-react';
+import { useEffect, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 
 export default function Home() {
-  console.log("Home page loaded");
   const [threadId, setThreadId] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(false);
@@ -104,6 +103,9 @@ export default function Home() {
     <div style={{ position:"relative", height: "100vh" }}>
       <MainContainer>
         <ChatContainer>
+          <ConversationHeader>
+            <ConversationHeader.Content userName="KI-Tutor" />
+          </ConversationHeader>
           <MessageList>
             {messages.map((msg, index) => (
               <Message
