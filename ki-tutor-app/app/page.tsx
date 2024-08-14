@@ -1,13 +1,13 @@
 'use client'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, ConversationHeader } from '@chatscope/chat-ui-kit-react';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput, ConversationHeader, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import { useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 
 export default function Home() {
   const [threadId, setThreadId] = useState("");
   const [messages, setMessages] = useState([]);
-  const [inputDisabled, setInputDisabled] = useState(false);
+  const [inputDisabled, setInputDisabled] = useState(true);
   const hiddenMessageSent = useRef(false);
 
   // On page load create a new thread
@@ -19,33 +19,16 @@ export default function Home() {
       const data = await res.json();
       setThreadId(data.threadId);
       if (!hiddenMessageSent.current) {
-        sendHiddenMessage(data.threadId, "Stelle dich kurz vor und ermutige das Stellen von Fragen.");
+        sendMessage(data.threadId, "Stelle dich kurz vor und ermutige das Stellen von Fragen.")
         hiddenMessageSent.current = true;
       }
     }
     if (!threadId) {
       createThread();
     }
-  }, [threadId]);
+  }, [threadId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const sendHiddenMessage = async (threadId, text) => {
-    const response = await fetch(
-      `/api/threads/${threadId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          content: text,
-        }),
-      }
-    );
-    const stream = AssistantStream.fromReadableStream(response.body);
-    handleReadableStream(stream);
-  };
-
-  const sendMessage = async (text) => {
+  const sendMessage = async (threadId, text) => {
     const response = await fetch(
         `/api/threads/${threadId}`,
         {
@@ -78,8 +61,6 @@ export default function Home() {
         ...prevMessages,
         {
           message: message,
-          sentTime: "just now",
-          sender: "Joe",
           direction: role === "user" ? "outgoing" : "incoming",
           position: "single"
         },
@@ -117,7 +98,7 @@ export default function Home() {
   const handleSend = (text) => {
     setInputDisabled(true);
     appendMessage("user", text);
-    sendMessage(text);
+    sendMessage(threadId, text);
   }
 
 
@@ -128,14 +109,16 @@ export default function Home() {
           <ConversationHeader>
             <ConversationHeader.Content userName="KI-Tutor" />
           </ConversationHeader>
-          <MessageList>
+          <MessageList typingIndicator={
+            inputDisabled ? <TypingIndicator content="KI-Tutor schreibt..." /> : null
+          }>
             {messages.map((msg, index) => (
               <Message
                 key={index}
                 model={msg}
               />
             ))}
-            </MessageList>
+          </MessageList>
           <MessageInput
             placeholder="Stelle deine Frage..."
             disabled={inputDisabled}
