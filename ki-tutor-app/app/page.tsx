@@ -1,6 +1,14 @@
 'use client'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, ConversationHeader, TypingIndicator } from '@chatscope/chat-ui-kit-react';
+import {
+  MainContainer,
+  ChatContainer,
+  MessageList,
+  Message,
+  MessageInput,
+  ConversationHeader,
+  TypingIndicator
+} from '@chatscope/chat-ui-kit-react';
 import { useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 
@@ -8,25 +16,29 @@ export default function Home() {
   const [threadId, setThreadId] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(true);
-  const hiddenMessageSent = useRef(false);
+  const threadCreated = useRef(false);
 
   // On page load create a new thread
   useEffect(() => {
+
     const createThread = async () => {
       const res = await fetch("/api/threads", {
          method: "POST"
       });
       const data = await res.json();
       setThreadId(data.threadId);
-      if (!hiddenMessageSent.current) {
-        sendMessage(data.threadId, "Stelle dich kurz vor und ermutige das Stellen von Fragen.")
-        hiddenMessageSent.current = true;
-      }
+
+      // Send a hidden message to the assistant to encourage the user to ask questions
+      sendMessage(data.threadId, "Stelle dich kurz vor und ermutige das Stellen von Fragen.")
     }
-    if (!threadId) {
+
+    // Only create a thread once
+    if (!threadCreated.current) {
+      threadCreated.current = true;
       createThread();
     }
-  }, [threadId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sendMessage = async (threadId, text) => {
     const response = await fetch(
@@ -45,8 +57,8 @@ export default function Home() {
     handleReadableStream(stream);
   };
 
+  // Handle the incoming stream of the assistants response
   const handleReadableStream = (stream: AssistantStream) => {
-    // messages
     stream.on("textCreated", handleTextCreated);
     stream.on("textDelta", handleTextDelta);
     stream.on("event" , (event) => {
@@ -54,7 +66,7 @@ export default function Home() {
     });
   };
 
-
+  // Append a new message to the chat
   const appendMessage = (role, message) => {
     setMessages(prevMessages => {
       const newMessages = [
@@ -69,6 +81,7 @@ export default function Home() {
     });
   };
 
+  // Append text to the last message in the chat
   const appendToLastMessage = (text) => {
     setMessages(prevMessages => {
       const lastMessage = prevMessages[prevMessages.length - 1];
