@@ -83,15 +83,21 @@ export default function Home() {
 
   // Append text to the last message in the chat
   const appendToLastMessage = (text) => {
+    const cleanedText = removeAnnotations(text);
     setMessages(prevMessages => {
       const lastMessage = prevMessages[prevMessages.length - 1];
       const updatedMessages = prevMessages.slice(0, -1);
       updatedMessages.push({
         ...lastMessage,
-        message: lastMessage.message + text,
+        message: lastMessage.message + cleanedText,
       });
       return updatedMessages;
     });
+  };
+
+  const removeAnnotations = (text) => {
+    //remove annotations from the text e.g. 【6:0†source】
+    return text.replace(/【\d+:\d+†source】/g, "");
   };
 
   const handleTextCreated = () => {
