@@ -6,6 +6,6 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
-ENV OPENAI_API_KEY
+ENV OPENAI_API_KEY=undefined
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
