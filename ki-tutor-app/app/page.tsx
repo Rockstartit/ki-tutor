@@ -85,7 +85,7 @@ export default function Home() {
   const appendToLastMessage = (text) => {
     const cleanedText = removeAnnotations(text);
     setMessages(prevMessages => {
-      const lastMessage = prevMessages[prevMessages.length - 1];
+      const lastMessage = prevMessages[prevMessages.length - 1]; //maybe if check
       const updatedMessages = prevMessages.slice(0, -1);
       updatedMessages.push({
         ...lastMessage,
