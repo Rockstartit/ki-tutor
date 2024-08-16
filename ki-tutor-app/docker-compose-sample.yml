@@ -1,0 +1,8 @@
+services:
+  ki-tutor:
+    image: ghcr.io/rockstartit/ki-tutor:latest
+    restart: unless-stopped
+    environment:
+      - OPENAI_API_KEY=<<ENTER_KEY_HERE>>
+    ports:
+      - 3000:3000
