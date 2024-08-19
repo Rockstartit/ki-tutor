@@ -11,6 +11,7 @@ import {
 } from '@chatscope/chat-ui-kit-react';
 import { useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
+import Markdown from 'react-markdown';
 
 export default function Home() {
   const [threadId, setThreadId] = useState("");
@@ -74,7 +75,8 @@ export default function Home() {
         {
           message: message,
           direction: role === "user" ? "outgoing" : "incoming",
-          position: "single"
+          position: "single",
+          type: role === "user" ? "text" : "custom"
         },
       ];
       return newMessages;
@@ -135,7 +137,13 @@ export default function Home() {
               <Message
                 key={index}
                 model={msg}
-              />
+              >
+                {msg.type === "custom" && (
+                  <Message.CustomContent>
+                    <Markdown>{msg.message}</Markdown>
+                  </Message.CustomContent>
+                )}
+              </Message>
             ))}
           </MessageList>
           <MessageInput
