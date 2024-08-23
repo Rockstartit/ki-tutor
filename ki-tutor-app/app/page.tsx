@@ -62,6 +62,14 @@ export default function Home() {
   const handleReadableStream = (stream: AssistantStream) => {
     stream.on("textCreated", handleTextCreated);
     stream.on("textDelta", handleTextDelta);
+    stream.on("messageDone", async (event) => {
+      if (event.content[0].type === "text") {
+      const { text } = event.content[0];
+      console.log(text);
+      const {annotations} = text
+      //TODO: handle multiple annotations and no annotations
+      appendToLastMessage("\n Quelle: " + annotations[0]["file_citation"]["file_id"]);
+    }});
     stream.on("event" , (event) => {
       if (event.event === "thread.run.completed") handleRunCompleted()
     });
@@ -110,6 +118,9 @@ export default function Home() {
     if (delta.value != null) {
       appendToLastMessage(delta.value);
     };
+    if (delta.annotations != null) {
+      console.log(delta.annotations);
+    }
   }
 
   const handleRunCompleted = () => {
