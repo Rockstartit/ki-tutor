@@ -68,7 +68,7 @@ export default function Home() {
       console.log(text);
       const {annotations} = text
       //TODO: handle multiple annotations and no annotations
-      appendToLastMessage("\n Quelle: " + annotations[0]["file_citation"]["file_id"]);
+      appendToLastMessage("\n *Quelle: " + annotations[0]["file_citation"]["file_id"] + "*");
     }});
     stream.on("event" , (event) => {
       if (event.event === "thread.run.completed") handleRunCompleted()
