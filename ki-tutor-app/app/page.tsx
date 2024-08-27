@@ -116,10 +116,10 @@ export default function Home() {
     setInputDisabled(false);
   }
 
-  const handleSend = (text) => {
+  const handleSend = (_innerHtml, textContent, _innerText, _nodes) => {
     setInputDisabled(true);
-    appendMessage("user", text);
-    sendMessage(threadId, text);
+    appendMessage("user", textContent);
+    sendMessage(threadId, textContent);
   }
 
 
