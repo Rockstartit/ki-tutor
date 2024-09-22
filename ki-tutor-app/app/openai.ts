@@ -1,7 +1,9 @@
 import OpenAI from "openai";
 
-//api key
+//API Key wird aus der Umgebungsvariable OPENAI_API_KEY gelesen
 export const openai = new OpenAI({
     organization: "org-JOZZVGILnxuXT7NdjxlKF7g8"
 });
-export const assistantId = "asst_nUCtNHJFFdODxsSde7TJ0iJ2"; // set your assistant ID here
+
+//Die Assistant ID welche für den Chat verwendet wird
+export const assistantId = "asst_nUCtNHJFFdODxsSde7TJ0iJ2";

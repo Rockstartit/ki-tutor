@@ -76,7 +76,7 @@ export default function Home() {
           message: message,
           direction: role === "user" ? "outgoing" : "incoming",
           position: "single",
-          type: role === "user" ? "text" : "custom"
+          type: role === "user" ? "text" : "custom" // Assistant responses can be in markdown so we need to use the custom type
         },
       ];
       return newMessages;
@@ -103,19 +103,24 @@ export default function Home() {
   };
 
   const handleTextCreated = () => {
+    // Add a new empty message to the chat
     appendMessage("assistant", "");
   };
 
   const handleTextDelta = (delta) => {
+    // Append the message part to the last message in the chat
     if (delta.value != null) {
       appendToLastMessage(delta.value);
     };
   }
 
+  // Enable the input field after the assistant has finished his response
   const handleRunCompleted = () => {
     setInputDisabled(false);
   }
 
+  // On send disable the input field and append the user message to the chat
+  // Then send the message to the backend for the assistant to process
   const handleSend = (_innerHtml, textContent, _innerText, _nodes) => {
     setInputDisabled(true);
     appendMessage("user", textContent);

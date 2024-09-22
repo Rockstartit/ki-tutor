@@ -3,7 +3,7 @@ import { openai } from "@/app/openai";
 
 export const runtime = "nodejs";
 
-// Send a new message to a thread
+// Add a new message to a thread and invoke the assistant on the updated thread
 export async function POST(request, { params: { threadId } }) {
   const { content } = await request.json();
 
