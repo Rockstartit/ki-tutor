@@ -22,9 +22,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Set a Placeholder for the OPENAI_API_KEY
+# Set a Placeholder for the Environment Variables
 # Needed for the build to pass
 ENV OPENAI_API_KEY=OPENAI_API_KEY
+ENV OPENAI_ORGANIZATION_ID=OPENAI_ORGANIZATION_ID
+ENV OPENAI_ASSISTANT_ID=OPENAI_ASSISTANT_ID
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry

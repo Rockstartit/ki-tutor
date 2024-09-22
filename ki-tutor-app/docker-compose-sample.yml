@@ -4,5 +4,7 @@ services:
     restart: unless-stopped
     environment:
       - OPENAI_API_KEY=<<ENTER_KEY_HERE>>
+      - OPENAI_ORGANIZATION_ID=<<ENTER_ORG_ID_HERE>>
+      - OPENAI_ASSISTANT_ID=<<ENTER_ASSISTANT_ID_HERE>>
     ports:
       - 3000:3000
