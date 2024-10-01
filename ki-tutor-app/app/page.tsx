@@ -13,6 +13,11 @@ import { useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 import Markdown from 'react-markdown';
 
+const ROLE_USER = "user"
+const ROLE_ASSISTANT = "assistant"
+const MSG_TYPE_TEXT = "text"
+const MSG_TYPE_CUSTOM = "custom"
+
 export default function Home() {
   const [threadId, setThreadId] = useState("");
   const [messages, setMessages] = useState([]);
@@ -70,13 +75,14 @@ export default function Home() {
   // Append a new message to the chat
   const appendMessage = (role, message) => {
     setMessages(prevMessages => {
+      const isUser = role === ROLE_USER;
       const newMessages = [
         ...prevMessages,
         {
           message: message,
-          direction: role === "user" ? "outgoing" : "incoming",
+          direction: isUser ? "outgoing" : "incoming",
           position: "single",
-          type: role === "user" ? "text" : "custom" // Assistant responses can be in markdown so we need to use the custom type
+          type: isUser ? MSG_TYPE_TEXT : MSG_TYPE_CUSTOM // Assistant responses can be in markdown so we need to use the custom type
         },
       ];
       return newMessages;
@@ -104,7 +110,7 @@ export default function Home() {
 
   const handleTextCreated = () => {
     // Add a new empty message to the chat
-    appendMessage("assistant", "");
+    appendMessage(ROLE_ASSISTANT, "");
   };
 
   const handleTextDelta = (delta) => {
@@ -123,7 +129,7 @@ export default function Home() {
   // Then send the message to the backend for the assistant to process
   const handleSend = (_innerHtml, textContent, _innerText, _nodes) => {
     setInputDisabled(true);
-    appendMessage("user", textContent);
+    appendMessage(ROLE_USER, textContent);
     sendMessage(threadId, textContent);
   }
 
@@ -143,7 +149,7 @@ export default function Home() {
                 key={index}
                 model={msg}
               >
-                {msg.type === "custom" && (
+                {msg.type === MSG_TYPE_CUSTOM && (
                   <Message.CustomContent>
                     <Markdown>{msg.message}</Markdown>
                   </Message.CustomContent>
