@@ -25,6 +25,14 @@ Es werden `Node.js` und `npm` benötigt, um das Projekt auszuführen.
 - `Dockerfile` - Docker-Datei für die Erstellung eines Docker-Images von der Web-App.
 - `cypress/e2e/ki-tutor.cy.js` - Enthält die End-to-End-Tests für die Web-App.
 
+## Docker-Compose
+
+Es ist möglich, die Web-App in einem Docker-Container auszuführen. Dazu muss die `docker-compose.yml`-Datei entsprechend konfiguriert werden. Eine Beispielkonfiguration ist in der Datei `docker-compose-sample.yml` enthalten.
+
+Es müssen die Umgebungsvariablen in der `docker-compose.yml`-Datei gesetzt werden, um den OpenAI API Key, die Organisations_ID und die Assistant_ID zu konfigurieren.
+
+Danach kann die Web-App mit dem Befehl `docker-compose up` gestartet werden.
+
 ## Tests
 
 Dieses Projekt verwendet Cypress für End-to-End-Tests. Befolge die folgenden Schritte, um die Tests auszuführen.
