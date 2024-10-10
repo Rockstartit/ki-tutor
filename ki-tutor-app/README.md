@@ -13,6 +13,17 @@ Es werden `Node.js` und `npm` benötigt, um das Projekt auszuführen.
 4.	Starte den lokalen Entwicklungsserver mit `npm run dev`.
 5.	Rufe die angegebene URL im Browser auf (standardmäßig [http://localhost:3000](http://localhost:3000)).
 
+## Dateistruktur
+
+- `app/` - Enthält die React-Komponenten und Seiten der Web-App.
+- `app/page.tsx` - Ist in der aktuellen Version die Hauptseite und die einzige Seite der Web-App. Hier ist das Frontend der Web-App implementiert.
+- `api/` - Enthält die Backend-API-Endpunkte
+- `api/threads/route.ts` - API-Endpunkt zum Erstellen eines neuen Threads
+- `api/threads/[id]/route.ts` - API-Endpunkt zum senden einer neuen Nachricht in einem Thread
+- `.env-example` - Beispiel-Datei für Umgebungsvariablen
+- `docker-compose-sample.yml` - Beispiel-Datei für Docker-Compose-Konfiguration
+- `Dockerfile` - Docker-Datei für die Erstellung eines Docker-Images von der Web-App.
+- `cypress/e2e/ki-tutor.cy.js` - Enthält die End-to-End-Tests für die Web-App.
 
 ## Tests
 
