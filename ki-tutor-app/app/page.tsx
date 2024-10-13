@@ -9,7 +9,7 @@ import {
   ConversationHeader,
   TypingIndicator
 } from '@chatscope/chat-ui-kit-react';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 import Markdown from 'react-markdown';
 import { useSearchParams } from 'next/navigation';
@@ -19,7 +19,7 @@ const ROLE_ASSISTANT = "assistant"
 const MSG_TYPE_TEXT = "text"
 const MSG_TYPE_CUSTOM = "custom"
 
-export default function Home() {
+function ChatComponent() {
   const [threadId, setThreadId] = useState("");
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(true);
@@ -176,5 +176,14 @@ export default function Home() {
         </ChatContainer>
       </MainContainer>
     </div>
+  );
+}
+
+// Wrap the ChatComponent with Suspense for handling the asynchronous nature of useSearchParams
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChatComponent />
+    </Suspense>
   );
 }
