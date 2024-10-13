@@ -15,7 +15,9 @@ Es werden `Node.js` und `npm` benötigt, um das Projekt auszuführen.
 
 ## Mehrere KI-Tutoren
 
-Standardmäßig wird der KI-Tutor verwendet, dessen `OPENAI_ASSISTANT_ID` in der `.env-Datei` konfiguriert ist. Es besteht jedoch auch die Möglichkeit, alternative KI-Tutoren zu nutzen, indem in der URL der Query-Parameter `assistant` zusammen mit der entsprechenden Assistant-ID des gewünschten KI-Tutors hinzugefügt wird. Zum Beispiel: `http://localhost:3000/?assistant=<your-assistant-id>`. Wichtig ist, dass dieser KI-Tutor zur gleichen Organisation gehört wie der API-Schlüssel. Diese Funktion ermöglicht es, mehrere KI-Tutoren in einer einzigen Instanz der Web-App zu verwenden und direkt auf den jeweiligen KI-Tutor zu verlinken.
+Standardmäßig wird der KI-Tutor verwendet, dessen `OPENAI_ASSISTANT_ID` in der `.env-Datei` konfiguriert ist. Es besteht jedoch auch die Möglichkeit, alternative KI-Tutoren zu nutzen, indem in der URL der Query-Parameter `assistant` zusammen mit der entsprechenden Assistant-ID des gewünschten KI-Tutors hinzugefügt wird. Zum Beispiel: `http://localhost:3000/?assistant=<your-assistant-id>`. Diese Funktion ermöglicht es, mehrere KI-Tutoren in einer einzigen Instanz der Web-App zu verwenden und direkt auf den jeweiligen KI-Tutor zu verlinken.
+
+Wichtig ist, dass dieser KI-Tutor zur gleichen Organisation gehört wie der API-Schlüssel, da nur auf KI-Tutoren innerhalb der gleichen Organisation zugegriffen werden kann.
 
 ## Dateistruktur
 
