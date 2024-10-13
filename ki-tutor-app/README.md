@@ -13,6 +13,10 @@ Es werden `Node.js` und `npm` benötigt, um das Projekt auszuführen.
 4.	Starte den lokalen Entwicklungsserver mit `npm run dev`.
 5.	Rufe die angegebene URL im Browser auf (standardmäßig [http://localhost:3000](http://localhost:3000)).
 
+## Mehrere KI-Tutoren
+
+Standardmäßig wird der KI-Tutor verwendet, dessen `OPENAI_ASSISTANT_ID` in der `.env-Datei` konfiguriert ist. Es besteht jedoch auch die Möglichkeit, alternative KI-Tutoren zu nutzen, indem in der URL der Query-Parameter `assistant` zusammen mit der entsprechenden Assistant-ID des gewünschten KI-Tutors hinzugefügt wird. Zum Beispiel: `http://localhost:3000/?assistant=<your-assistant-id>`. Wichtig ist, dass dieser KI-Tutor zur gleichen Organisation gehört wie der API-Schlüssel. Diese Funktion ermöglicht es, mehrere KI-Tutoren in einer einzigen Instanz der Web-App zu verwenden und direkt auf den jeweiligen KI-Tutor zu verlinken.
+
 ## Dateistruktur
 
 - `app/` - Enthält die React-Komponenten und Seiten der Web-App.

@@ -12,6 +12,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { AssistantStream } from 'openai/lib/AssistantStream.mjs';
 import Markdown from 'react-markdown';
+import { useSearchParams } from 'next/navigation';
 
 const ROLE_USER = "user"
 const ROLE_ASSISTANT = "assistant"
@@ -23,6 +24,8 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(true);
   const threadCreated = useRef(false);
+  const searchParams = useSearchParams()
+  const assistantId = searchParams.get("assistant");
 
   // On page load create a new thread
   useEffect(() => {
@@ -47,8 +50,15 @@ export default function Home() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sendMessage = async (threadId, text) => {
-    const response = await fetch(
-        `/api/threads/${threadId}`,
+
+    let url = `/api/threads/${threadId}`;
+
+    // Add the assistantId to the url if it is provided
+    if (assistantId) {
+      url += `?assistantId=${assistantId}`;
+    }
+
+    const response = await fetch(url,
         {
           method: "POST",
           headers: {
